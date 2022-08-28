@@ -1,0 +1,38 @@
+server:
+  port: 80
+
+feign:
+  hystrix:
+    enabled: true #如果处理自身的容错就开启。开启方式与生产端不一样。
+
+
+eureka:
+  client:
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://localhost:7001/eureka,http://localhost:7002/eureka/
+
+ribbon:
+  ReadTimeout:  3000
+  ConnectTimeout: 7000
+
+
+### 针对单个服务的 Ribbon 配置
+CLOUD-PAYMENT-SERVICE:
+  ribbon:
+    # 基于配置文件形式的 针对单个服务的 Ribbon 负载均衡策略 com.netflix.loadbalancer.RandomRule
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+CLOUD-PROVIDER-HYSTRIX-PAYMENT:
+  ribbon:
+    # 基于配置文件形式的 针对单个服务的 Ribbon 负载均衡策略
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+
+# 包含连接和请求时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
